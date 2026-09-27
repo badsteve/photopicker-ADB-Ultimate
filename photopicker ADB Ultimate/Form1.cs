@@ -17,8 +17,6 @@ namespace photopicker_ADB_Ultimate
         {
             InitializeComponent();
             lstPhotos.SelectedIndexChanged += new EventHandler(LstPhotos_SelectedIndexChanged);//work around
-            //cmbDirectory.SelectedIndexChanged += new EventHandler(cmbDirectory_SelectedIndexChanged);
-
         }
 
         private string adbPath = @"C:\Users\Steve\AppData\Local\Android\Sdk\platform-tools\adb.exe";
@@ -55,32 +53,10 @@ namespace photopicker_ADB_Ultimate
                 MessageBox.Show("Please enter the Wireless Debugging port.");
                 return;
             }
-
             lblStatus.Text = "Connecting...";
             Application.DoEvents();
-
             RunADB("connect 192.168.1.35:" + port);
-
-            //lblStatus.Text = "Fetching photo list from DCIM...";
-            //Application.DoEvents();
-
-            //lstPhotos.Items.Clear();
-
-            //string rawList = RunADB("shell find /sdcard/DCIM/ -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.jpeg\" \\)");
-            //string[] lines = rawList.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-            //foreach (string line in lines)
-            //{
-            //    if (line.StartsWith("/sdcard/"))
-            //    {
-            //        lstPhotos.Items.Add(line.Trim());
-            //    }
-            //}
-
-            //lblStatus.Text = "Found " + lstPhotos.Items.Count + " photos. Click any file to preview.";
-
             LoadPhotoList();
-
         }
 
         private void LstPhotos_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,24 +83,12 @@ namespace photopicker_ADB_Ultimate
             // Simple direct bitmap load preview
             if (File.Exists(localTempPath))
             {
-
-
                 //check id PDF before trying to load as a bitmap
                 if (localTempPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
                     //hide picture box and launch acrobat
                     picPreview.Visible = true;
                     picPreview.Image = SystemIcons.Application.ToBitmap();
-
-                    //below is working fine
-                    //System.Diagnostics.Process.Start(localTempPath);
-                    //lblStatus.Text = "Opened PDF in default viewer: " + fileName;
-                    //return;
-                    //lblStatus.Text = "Selected file is a PDF (no preview available).";
-                    //return;
-
-
-
 
                     System.Diagnostics.Process proc = System.Diagnostics.Process.Start(localTempPath);
                     //wait for new window to initialize then resize and reposition (x,y,width,height)
@@ -133,13 +97,10 @@ namespace photopicker_ADB_Ultimate
                     if (proc.MainWindowHandle != IntPtr.Zero)
                     {
                         MoveWindow(proc.MainWindowHandle, 200, 200, 900, 700, true);
-
                     }
 
                     lblStatus.Text = "Opened PDF in default viewer: " + fileName;
                     return;
-
-
                 }
                 else
                 {
@@ -198,7 +159,6 @@ namespace photopicker_ADB_Ultimate
                 Process.Start("explorer.exe", destFolder);
                 folderOpened = true;
             }
-
         }
 
         private void btnCut_Click(object sender, EventArgs e)
@@ -280,15 +240,12 @@ namespace photopicker_ADB_Ultimate
             if (ShowDeletePrompt(fileName, localTempPath))
             {
                 //1. Delete from phone via ADB
-                //string adbResult = RunADB("shell rm \"" + remotePath + "\"");
                 string adbResult = RunADB("shell rm '" + remotePath + "'");
 
                 if (!string.IsNullOrEmpty(adbResult.Trim()))
                 {
                     MessageBox.Show("ADB Delete Output:\n" + adbResult, "Delete Notice");
                 }
-
-
 
                 //2. Clean up local temp cache copy
                 if (File.Exists(localTempPath))
@@ -439,19 +396,7 @@ namespace photopicker_ADB_Ultimate
                 // If connected, automatically reload the list when switching folders
                 if (!string.IsNullOrEmpty(txtPort.Text.Trim()))
                 {
-                    //lstPhotos.Items.Clear();
-                    //string rawList = RunADB("shell find \"" + currentFolderPath + "\" -type f \\( -name \"*.jpg\" -o -name \"*.png\" -o -name \"*.jpeg\" -o -name \"*.PDF\" \\)");
-                    //string[] lines = rawList.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    //foreach (string line in lines)
-                    //{
-                        //if (line.StartsWith("/sdcard/"))
-                        //{
-                            //lstPhotos.Items.Add(line.Trim());
-                        //}
-                    //}
                     LoadPhotoList();
-                    //lblStatus.Text = "Loaded " + lstPhotos.Items.Count + " items from " + selectedChoice + ".";
                 }
             }
         }
@@ -481,9 +426,7 @@ namespace photopicker_ADB_Ultimate
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
-
             string uploadFolderPath = "/sdcard/Download/"; // Default start directory on the phone for uploading files
-            //string uploadFolderPath = "/sdcard/DCIM/Camera/"; //test to camera dir on phone
             string uploadStartPath = string.Empty; //PC directory of file to be uploaded
 
             //find file on PC to upload to phone
@@ -494,8 +437,6 @@ namespace photopicker_ADB_Ultimate
                 uploadStartPath = openFileDialog.FileName; //file chosen on PC for upload to phone
 
                 RunADB("push \"" + uploadStartPath + "\" \"" + uploadFolderPath + "\"");
-
-                //LoadPhotoList();
             }
             LoadPhotoList();
         }
