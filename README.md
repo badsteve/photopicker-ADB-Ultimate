@@ -1,4 +1,5 @@
 # photopicker-ADB-Ultimate
+
 wifi connection interface to access common files on phone
 
 PURPOSE: Create C# app to connect wirelessly to broken GALAXY S21 FE. regain access from PC to photos after hardware impairment using ADB bridge.
@@ -7,18 +8,24 @@ REASON: daughter board on phone had damaged pins on USB C port data pins, chargi
 
 RESULT: full access to desired directories on phone... DCIM/Camera, DCIM/Screenshots and Downloads
 
-FUNCTION: download files to pc or upload to phone, fast and hands free
+FUNCTION: download files to pc or upload to phone, fast and cable free
 
 ADB server required on PC. download android ADK or SDK
 
 no third party apps required.
 
-phone configuration
+phone configuration:
+
 developer options = ON
+
 wireless debugging = ON 
+
 Disable Wi-Fi Power Saving
+
 Lock Screen Timeout
+
 establish and assign static IP on network for phone
+
 band steering off on the network
 
 establish ADB pairing on phone
@@ -42,18 +49,26 @@ force phone to use port 5555 for file transfers, if not port will continually ch
 <<<DOS
 
 adb connect 192.168.1.35:MAIN_PORT
+
 adb tcpip 5555
+
 adb connect 192.168.1.35:5555
 
 >>>
 
 // Extend screen timeout on the phone to 30 minutes while using the app
+
 RunAdb("shell settings put system screen_off_timeout 1800000");
 
 // Optional: Keep Wi-Fi active during sleep
+
 RunAdb("shell settings put global wifi_sleep_policy 2");
 
 run program and easy access to DCIM and download folders on phone with no third party app or tethering
+
+check directory structures and edit as required, all hardcoded but I believe the phone file system should be static
+
+also built an FTP clone that requires third party app for ftp server on phone
 
 
 
