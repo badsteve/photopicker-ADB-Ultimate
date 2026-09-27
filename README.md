@@ -1,9 +1,12 @@
 # photopicker-ADB-Ultimate
 wifi connection interface to access common files on phone
 
-PURPOSE: Create C# app to connect wirelessly to broken GALAXY S21 FE. regain access from PC to photos after hardware impairment using ADB bridge. \n
+PURPOSE: Create C# app to connect wirelessly to broken GALAXY S21 FE. regain access from PC to photos after hardware impairment using ADB bridge.
+
 REASON: daughter board on phone had damaged pins on USB C port data pins, charging functionality not impaired.
+
 RESULT: full access to desired directories on phone... DCIM/Camera, DCIM/Screenshots and Downloads
+
 FUNCTION: download files to pc or upload to phone, fast and hands free
 
 ADB server required on PC. download android ADK or SDK
