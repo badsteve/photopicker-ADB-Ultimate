@@ -40,6 +40,9 @@ namespace photopicker_ADB_Ultimate
             this.btnConnect = new System.Windows.Forms.Button();
             this.cmbDirectory = new System.Windows.Forms.ComboBox();
             this.webBrowserPdf = new System.Windows.Forms.WebBrowser();
+            this.lblCacheSize = new System.Windows.Forms.Label();
+            this.btnOpenCache = new System.Windows.Forms.Button();
+            this.btnDeleteCache = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
             this.SuspendLayout();
             // 
@@ -160,11 +163,43 @@ namespace photopicker_ADB_Ultimate
             this.webBrowserPdf.TabIndex = 11;
             this.webBrowserPdf.Visible = false;
             // 
+            // lblCacheSize
+            // 
+            this.lblCacheSize.AutoSize = true;
+            this.lblCacheSize.Location = new System.Drawing.Point(1275, 791);
+            this.lblCacheSize.Name = "lblCacheSize";
+            this.lblCacheSize.Size = new System.Drawing.Size(133, 17);
+            this.lblCacheSize.TabIndex = 12;
+            this.lblCacheSize.Text = "PhonePhotosCache";
+            // 
+            // btnOpenCache
+            // 
+            this.btnOpenCache.Location = new System.Drawing.Point(1278, 822);
+            this.btnOpenCache.Name = "btnOpenCache";
+            this.btnOpenCache.Size = new System.Drawing.Size(130, 23);
+            this.btnOpenCache.TabIndex = 13;
+            this.btnOpenCache.Text = "View Cache";
+            this.btnOpenCache.UseVisualStyleBackColor = true;
+            this.btnOpenCache.Click += new System.EventHandler(this.btnOpenCache_Click);
+            // 
+            // btnDeleteCache
+            // 
+            this.btnDeleteCache.Location = new System.Drawing.Point(1431, 822);
+            this.btnDeleteCache.Name = "btnDeleteCache";
+            this.btnDeleteCache.Size = new System.Drawing.Size(130, 23);
+            this.btnDeleteCache.TabIndex = 14;
+            this.btnDeleteCache.Text = "Delete Cache";
+            this.btnDeleteCache.UseVisualStyleBackColor = true;
+            this.btnDeleteCache.Click += new System.EventHandler(this.btnDeleteCache_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1609, 857);
+            this.Controls.Add(this.btnDeleteCache);
+            this.Controls.Add(this.btnOpenCache);
+            this.Controls.Add(this.lblCacheSize);
             this.Controls.Add(this.webBrowserPdf);
             this.Controls.Add(this.cmbDirectory);
             this.Controls.Add(this.btnConnect);
@@ -199,6 +234,9 @@ namespace photopicker_ADB_Ultimate
         private System.Windows.Forms.Button btnUpload;
         private System.Windows.Forms.ComboBox cmbDirectory;
         private System.Windows.Forms.WebBrowser webBrowserPdf;
+        private System.Windows.Forms.Label lblCacheSize;
+        private System.Windows.Forms.Button btnOpenCache;
+        private System.Windows.Forms.Button btnDeleteCache;
         
         
         

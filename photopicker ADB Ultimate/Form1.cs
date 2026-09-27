@@ -53,10 +53,15 @@ namespace photopicker_ADB_Ultimate
                 MessageBox.Show("Please enter the Wireless Debugging port.");
                 return;
             }
+
             lblStatus.Text = "Connecting...";
             Application.DoEvents();
+
             RunADB("connect 192.168.1.35:" + port);
+
             LoadPhotoList();
+            photoCacheSize();
+
         }
 
         private void LstPhotos_SelectedIndexChanged(object sender, EventArgs e)
@@ -83,6 +88,8 @@ namespace photopicker_ADB_Ultimate
             // Simple direct bitmap load preview
             if (File.Exists(localTempPath))
             {
+
+
                 //check id PDF before trying to load as a bitmap
                 if (localTempPath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
                 {
@@ -97,10 +104,13 @@ namespace photopicker_ADB_Ultimate
                     if (proc.MainWindowHandle != IntPtr.Zero)
                     {
                         MoveWindow(proc.MainWindowHandle, 200, 200, 900, 700, true);
+
                     }
 
                     lblStatus.Text = "Opened PDF in default viewer: " + fileName;
                     return;
+
+
                 }
                 else
                 {
@@ -159,6 +169,7 @@ namespace photopicker_ADB_Ultimate
                 Process.Start("explorer.exe", destFolder);
                 folderOpened = true;
             }
+
         }
 
         private void btnCut_Click(object sender, EventArgs e)
@@ -247,6 +258,8 @@ namespace photopicker_ADB_Ultimate
                     MessageBox.Show("ADB Delete Output:\n" + adbResult, "Delete Notice");
                 }
 
+
+
                 //2. Clean up local temp cache copy
                 if (File.Exists(localTempPath))
                 {
@@ -334,7 +347,7 @@ namespace photopicker_ADB_Ultimate
                     }
                     catch
                     {
-                        //fallback is image stream fails
+                        //fallback if image stream fails
                         deletePicThumb.Image = SystemIcons.Warning.ToBitmap();
                     }
                 }
@@ -422,11 +435,15 @@ namespace photopicker_ADB_Ultimate
 
             lblStatus.Text = "Found " + lstPhotos.Items.Count + " images. Click any file to preview.";
 
+            photoCacheSize();
+
         }//end LoadPhotoList
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
+
             string uploadFolderPath = "/sdcard/Download/"; // Default start directory on the phone for uploading files
+            //string uploadFolderPath = "/sdcard/DCIM/Camera/"; //test to camera dir on phone
             string uploadStartPath = string.Empty; //PC directory of file to be uploaded
 
             //find file on PC to upload to phone
@@ -437,8 +454,55 @@ namespace photopicker_ADB_Ultimate
                 uploadStartPath = openFileDialog.FileName; //file chosen on PC for upload to phone
 
                 RunADB("push \"" + uploadStartPath + "\" \"" + uploadFolderPath + "\"");
+
+                //LoadPhotoList();
             }
             LoadPhotoList();
+        }
+
+        private void photoCacheSize()
+        {
+            //tempCacheFolder management
+
+            DirectoryInfo di = new DirectoryInfo(tempCacheFolder);
+            FileInfo[] files = di.GetFiles();
+
+            //find total files and size of dir
+            int totalFiles = files.Length;
+            long totalBytes = 0;
+
+            foreach (FileInfo file in files)
+            {
+                totalBytes += file.Length;
+            }
+
+            double totalMB = Math.Round(totalBytes / (1024.0 * 1024.0), 2);//convert bytes to MB
+
+            lblCacheSize.Text = "PhonePhotosCache - " + totalFiles + " items / " + totalMB + " MB.";
+        }
+
+        private void btnOpenCache_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(tempCacheFolder))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", tempCacheFolder);
+            }
+
+        }
+
+        private void btnDeleteCache_Click(object sender, EventArgs e)
+        {
+            if (Directory.Exists(tempCacheFolder))
+            {
+                DirectoryInfo di = new DirectoryInfo(tempCacheFolder);
+
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+
+                photoCacheSize();
+            }
         }
 
 
